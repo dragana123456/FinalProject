@@ -25,6 +25,6 @@ public class LoginPage extends TestBase{
 		email.sendKeys(mail);
 		password.sendKeys(pwd);
 		loginBtn.click();
-		return new DashboardPage();
+		return PageFactory.initElements(driver, DashboardPage.class);
 	}
 }

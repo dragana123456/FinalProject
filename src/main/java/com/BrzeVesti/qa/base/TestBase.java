@@ -9,14 +9,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.BrzeVesti.qa.testdata.TestUtil;
+import com.BrzeVesti.qa.util.Util;
 
 public class TestBase {
 	
 	public static WebDriver driver;
 	public static Properties prop;
 	public static WebDriverWait wait;
-
 	
 	
 	public TestBase() {
@@ -43,10 +42,11 @@ public class TestBase {
 			driver = new FirefoxDriver();
 		}
 		
+		
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
-		driver.manage().timeouts().pageLoadTimeout(TestUtil.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
-		driver.manage().timeouts().implicitlyWait(TestUtil.IMPLICIT_WAIT, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(Util.PAGE_LOAD_TIMEOUT, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(Util.IMPLICIT_WAIT, TimeUnit.SECONDS);
 		
 		driver.get(prop.getProperty("url"));
 		

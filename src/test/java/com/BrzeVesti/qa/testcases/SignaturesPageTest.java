@@ -33,10 +33,10 @@ public class SignaturesPageTest extends TestBase{
 		Assert.assertTrue(signaturesPage.verifySignaturesLabel(), "Signatures label is missing on page");
 	}
 	
-	@Test
-	public void selectSignaturesByValueTest() {
-		signaturesPage.selectSignaturesByValues("kurir", "New", "Film");
-	}
+//	@Test
+//	public void selectSignaturesByValueTest() {
+//		signaturesPage.selectSignaturesByValues("Vesti", "New", "Film");
+//	}
 	
 	@AfterMethod
 	public void tearDown(){

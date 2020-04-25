@@ -37,28 +37,35 @@ public class CategoriesPageTests extends TestBase{
 		Assert.assertTrue(categoriesPage.verifyContactPageLabel(), "ContactsPageLabel label is missing on page");
 	}
 	
+    //Testing Add category button
+	
 	@Test
-	public void addCategory() {
+	public String addCategory() {
 		categoriesPageInsertCategory = categoriesPage.clickOnAddCategory();
 		String randomCategoryName = Util.getRandomName();
 		categoriesPageInsertCategory.addNewCategory(randomCategoryName);
 		
 		driver.findElement(By.xpath("//div[contains(text(),'Category \"" +  randomCategoryName + "\" has been successfully saved!')]")).isDisplayed();
+		return randomCategoryName;
 	}
+	
+    //Testing Delete Category button (add random category, delete that random category)
 	
 	@Test
 	public void deleteCategory() {
-		categoriesPageInsertCategory = categoriesPage.clickOnAddCategory();
-		String randomCategoryName = Util.getRandomName();
-		categoriesPageInsertCategory.addNewCategory(randomCategoryName);
-		
-		driver.findElement(By.xpath("//div[contains(text(),'Category \"" +  randomCategoryName + "\" has been successfully saved!')]")).isDisplayed();
+		String randomCategoryName = this.addCategory();
 		
 		categoriesPage.deleteCategories(randomCategoryName);
 		driver.findElement(By.xpath("//button[contains(text(),'Delete')]")).click();
 		
 		driver.findElement(By.xpath("//div[contains(text(),'Category \"" +  randomCategoryName + "\" has been successfully deleted!')]")).isDisplayed();
-
+	}
+	
+	@Test
+	public void backToCategory() {
+		
+		categoriesPageInsertCategory = categoriesPage.clickOnAddCategory();
+		categoriesPageInsertCategory.backToCategories();	
 	}
 	
 	@AfterMethod
