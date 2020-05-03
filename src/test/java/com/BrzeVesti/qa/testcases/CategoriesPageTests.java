@@ -1,9 +1,9 @@
 package com.BrzeVesti.qa.testcases;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import com.BrzeVesti.qa.base.TestBase;
@@ -11,24 +11,17 @@ import com.BrzeVesti.qa.pages.CategoriesPage;
 import com.BrzeVesti.qa.pages.CategoriesPageInsertCategory;
 import com.BrzeVesti.qa.pages.DashboardPage;
 import com.BrzeVesti.qa.pages.LoginPage;
-import com.BrzeVesti.qa.util.Util;
 
 public class CategoriesPageTests extends TestBase{
 	
-	public CategoriesPageTests() {
-		super();
-	}
-	
-	LoginPage loginPage;
-	DashboardPage dashboardPage;
-	CategoriesPage categoriesPage;
-	CategoriesPageInsertCategory categoriesPageInsertCategory;
+	private CategoriesPage categoriesPage;
+	private CategoriesPageInsertCategory categoriesPageInsertCategory;
 	
 	@BeforeMethod
 	public void setUp() {
 		init();
-		loginPage = new LoginPage();
-		dashboardPage = loginPage.login(prop.getProperty("email"), prop.getProperty("password"));
+		LoginPage loginPage = new LoginPage();
+		DashboardPage dashboardPage = loginPage.login(prop.getProperty("email"), prop.getProperty("password"));
 		categoriesPage = dashboardPage.clickOnCategoriesLink();
 	}
 	
@@ -39,33 +32,42 @@ public class CategoriesPageTests extends TestBase{
 	
     //Testing Add category button
 	
-	@Test
-	public String addCategory() {
-		categoriesPageInsertCategory = categoriesPage.clickOnAddCategory();
-		String randomCategoryName = Util.getRandomName();
-		categoriesPageInsertCategory.addNewCategory(randomCategoryName);
-		
-		driver.findElement(By.xpath("//div[contains(text(),'Category \"" +  randomCategoryName + "\" has been successfully saved!')]")).isDisplayed();
-		return randomCategoryName;
+	@Ignore
+	public void addCategory() {
+		categoriesPage.clickOnAddCategory().addNewCategory("Dragana");
+		Assert.assertEquals(categoriesPage.successfullySaved(), true);
 	}
 	
-    //Testing Delete Category button (add random category, delete that random category)
-	
+	@Test
+	public void addRandomCategory() {
+		categoriesPage.clickOnAddCategory().insertRandomCategoryName();
+		
+		Assert.assertEquals(categoriesPage.successfullySaved(), true);
+	}
+		
 	@Test
 	public void deleteCategory() {
-		String randomCategoryName = this.addCategory();
+		categoriesPage.clickOnAddCategory().addNewCategory("Dragana");
+		categoriesPage.deleteCategory("Dragana");
 		
-		categoriesPage.deleteCategories(randomCategoryName);
-		driver.findElement(By.xpath("//button[contains(text(),'Delete')]")).click();
+		Assert.assertTrue(categoriesPage.successfullyDeleted());	
+	}
+	
+	@Test
+	public void deleteRandomCategory() {
+		String categoryName = categoriesPage.clickOnAddCategory().insertRandomCategoryName();
+		categoriesPage.deleteCategory(categoryName);	
 		
-		driver.findElement(By.xpath("//div[contains(text(),'Category \"" +  randomCategoryName + "\" has been successfully deleted!')]")).isDisplayed();
+		Assert.assertTrue(categoriesPage.successfullyDeleted());	
 	}
 	
 	@Test
 	public void backToCategory() {
 		
 		categoriesPageInsertCategory = categoriesPage.clickOnAddCategory();
-		categoriesPageInsertCategory.backToCategories();	
+		categoriesPageInsertCategory.backToCategories();
+		
+		Assert.assertTrue(categoriesPage.verifyContactPageLabel());
 	}
 	
 	@AfterMethod

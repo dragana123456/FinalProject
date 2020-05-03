@@ -42,6 +42,8 @@ public class TestBase {
 			driver = new FirefoxDriver();
 		}
 		
+		wait = new WebDriverWait(driver, 10);
+		
 		
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();

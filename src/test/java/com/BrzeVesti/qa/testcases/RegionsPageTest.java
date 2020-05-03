@@ -1,6 +1,5 @@
 package com.BrzeVesti.qa.testcases;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -11,7 +10,6 @@ import com.BrzeVesti.qa.pages.DashboardPage;
 import com.BrzeVesti.qa.pages.LoginPage;
 import com.BrzeVesti.qa.pages.RegionsPage;
 import com.BrzeVesti.qa.pages.RegionsPageInsertRegions;
-import com.BrzeVesti.qa.util.Util;
 
 public class RegionsPageTest extends TestBase{
 	
@@ -39,27 +37,32 @@ public class RegionsPageTest extends TestBase{
 	
 	@Test
 	public void addRegion() {
-		regionsPageInsertRegions = regionsPage.clickOnAddRegions();
-		String randomRegionName = Util.getRandomName();
-		regionsPageInsertRegions.addNewRegion(randomRegionName);
+		regionsPage.clickOnAddRegions().addNewRegion("Mačva");
 		
-		driver.findElement(By.xpath("//div[contains(text(),'Region \"" +  randomRegionName + "\" has been successfully saved!')]")).isDisplayed();
+		Assert.assertEquals(regionsPage.successfullySaved(), true);
 	}
 	
 	@Test
 	public void deleteRegion() {
-		regionsPageInsertRegions = regionsPage.clickOnAddRegions();
-		String randomRegionName = Util.getRandomName();
-		regionsPageInsertRegions.addNewRegion(randomRegionName);
+		regionsPage.clickOnAddRegions().addNewRegion("Mačva");
+		regionsPage.deleteRegions("Mačva");
 		
-		driver.findElement(By.xpath("//div[contains(text(),'Region \"" +  randomRegionName + "\" has been successfully saved!')]")).isDisplayed();
+		Assert.assertEquals(regionsPage.successfullyDeleted(), true);
+	}
+	
+	@Test
+	public void addRandomRegion() {
+		regionsPage.clickOnAddRegions().insertRandomRegion();
 		
-		regionsPage.deleteRegions(randomRegionName);
-		driver.findElement(By.xpath("//button[contains(text(),'Delete')]")).click();
+		Assert.assertTrue(regionsPage.successfullySaved(), "Region not added!!");
+	}
+	
+	@Test
+	public void deleteRandomRegion() {
+		String regionName = regionsPage.clickOnAddRegions().insertRandomRegion();
+		regionsPage.deleteRegions(regionName);
 		
-		
-		driver.findElement(By.xpath("//div[contains(text(),'Region \"" +  randomRegionName + "\" has been successfully deleted!')]")).isDisplayed();
-
+		Assert.assertTrue(regionsPage.successfullyDeleted(), "Region not deleted");	
 	}
 	
 	@AfterMethod

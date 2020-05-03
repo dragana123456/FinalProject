@@ -20,9 +20,12 @@ public class RegionsPage extends TestBase {
 	
 	@FindBy(xpath = "//a[@type]")
 	WebElement addBtn;
-	//a[@type]
+
 	@FindBy(xpath = "//button[contains(text(),'Delete')]")
 	WebElement delete;
+	
+	@FindBy(xpath="//div[contains(text(),'successfully saved!')]")
+	WebElement successfullySaved;
 	
 	public boolean verifyRegionsPageLabel() {
 		return regionLabel.isDisplayed();
@@ -36,5 +39,13 @@ public class RegionsPage extends TestBase {
 	public void deleteRegions(String regionName) {
 		driver.findElement(By.xpath("//button[@data-region_title=\"" + regionName + "\" and @title=\"Delete\"]")).click();
 		delete.click();	
+	}
+	
+	public boolean successfullySaved() {
+		return successfullySaved.isDisplayed();
+	}
+	
+	public boolean successfullyDeleted() {
+		return delete.isDisplayed();
 	}
 }
